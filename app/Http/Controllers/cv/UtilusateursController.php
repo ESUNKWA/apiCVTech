@@ -5,15 +5,16 @@ namespace App\Http\Controllers\cv;
 use App\Models\cr;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
 use App\Http\traits\responseTrait;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class UtilusateursController extends Controller
 {
     use responseTrait;
     /**
-     * Liste des utilisateurs.
+     * Liste des utilisateurs par ordre alphabétique.
      *
      * @return \Illuminate\Http\Response
      */
@@ -42,14 +43,43 @@ class UtilusateursController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Cette fonction permet de créer un nouvelle utilisateur dans la bd.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+
+        try {
+            //Validation des données
+            $validation = Validator::make($input, [
+                'name' => 'required',
+                'email' => 'required|email',
+                'password' => 'required|confirmed',
+            ]);
+
+            if( !$validation->fails() ) {
+
+                //Insertion dans la bd
+                $insert = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => bcrypt($request->password)
+                ]);
+
+                return $this->responseSuccess(json_decode($insert->id));
+
+            }else {
+                return $this->responseError($validation->errors());
+            }
+
+
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
+
     }
 
     /**
