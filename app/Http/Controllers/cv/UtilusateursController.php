@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\traits\responseTrait;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UtilusateursController extends Controller
@@ -125,5 +126,49 @@ class UtilusateursController extends Controller
     public function destroy(cr $cr)
     {
         //
+    }
+
+    public function login(Request $request){
+
+        $inputs = $request->all();
+
+        //Validation des données
+
+        $errors = [
+            'email' => 'required',
+            'password' => 'required',
+        ];
+
+        $erreurs = [
+            'email.required' => 'L\'addresse email est réquis',
+            'password.required' => 'Le mot de passe est réquis',
+        ];
+
+        $validation = Validator::make($inputs, $errors, $erreurs);
+
+        if( !$validation->fails() ){
+
+            try {
+
+                //Enregistrement des données dans la base de données
+
+                $utilisateur = User::where('email', '=', $request->email)->first();
+
+                if($comparaison = Hash::check($request->password, $utilisateur->password)){
+
+                    return $this->responseSuccess('Utilisateur trouvé', [json_decode($utilisateur)]);
+
+                }else{
+                    return $this->responseError('');
+                }
+
+            } catch (\Exception $th) {
+                return $this->responseError($th->getMessage());
+            }
+
+        }else{
+            return $validation->errors();
+        }
+
     }
 }

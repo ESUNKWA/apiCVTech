@@ -9,3 +9,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('utilisateur', 'App\Http\Controllers\cv\UtilusateursController');
+Route::post('utilisateur.login', [UtilusateursController::class,'login']);
