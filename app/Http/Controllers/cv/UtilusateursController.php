@@ -24,7 +24,7 @@ class UtilusateursController extends Controller
 
             $listeUtilisateurs = User::orderBy('name', 'ASC')->get();
 
-            return $this->responseSuccess(json_decode($listeUtilisateurs));
+            return $this->responseSuccess('Liste des utilisateurs',json_decode($listeUtilisateurs));
 
         } catch (\Throwable $th) {
 
@@ -69,7 +69,7 @@ class UtilusateursController extends Controller
                     'password' => bcrypt($request->password)
                 ]);
 
-                return $this->responseSuccess(json_decode($insert->id));
+                return $this->responseSuccess( 'L\'utilisateur [ '. $insert->name .' ] a bien été ajouté');
 
             }else {
                 return $this->responseError($validation->errors());
