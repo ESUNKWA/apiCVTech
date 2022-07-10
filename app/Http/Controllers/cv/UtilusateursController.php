@@ -2,20 +2,34 @@
 
 namespace App\Http\Controllers\cv;
 
-use App\Http\Controllers\Controller;
 use App\Models\cr;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class UtilusateursController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Liste des utilisateurs.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        try {
+
+            $listeUtilisateurs = User::orderBy('name', 'ASC')->get();
+
+            $response = [
+                "_status" => 1,
+                "_datas" => $listeUtilisateurs
+            ];
+
+            return response()->json($response, 200);
+
+        } catch (\Throwable $th) {
+            return $th->getMessage();
+        }
     }
 
     /**
@@ -40,7 +54,7 @@ class UtilusateursController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     *
      *
      * @param  \App\Models\cr  $cr
      * @return \Illuminate\Http\Response
