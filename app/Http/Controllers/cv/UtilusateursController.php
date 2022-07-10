@@ -7,8 +7,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\traits\responseTrait;
+
 class UtilusateursController extends Controller
 {
+    use responseTrait;
     /**
      * Liste des utilisateurs.
      *
@@ -20,15 +23,11 @@ class UtilusateursController extends Controller
 
             $listeUtilisateurs = User::orderBy('name', 'ASC')->get();
 
-            $response = [
-                "_status" => 1,
-                "_datas" => $listeUtilisateurs
-            ];
-
-            return response()->json($response, 200);
+            return $this->responseSuccess(json_decode($listeUtilisateurs));
 
         } catch (\Throwable $th) {
-            return $th->getMessage();
+
+            return $this->responseError($th->getMessage());
         }
     }
 
