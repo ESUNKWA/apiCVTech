@@ -10,7 +10,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('utilisateur.login', [UtilusateursController::class,'login']);
 Route::group([ 'middleware' => 'auth:sanctum'], function(){
+    //Route relative au controller UtilusateursController
     Route::resource('utilisateur', 'App\Http\Controllers\cv\UtilusateursController');
     Route::post('utilisateur.logout', [UtilusateursController::class,'logout']);
+
+    //Route relative au controller ExperienceController
+    Route::resource('experience', 'App\Http\Controllers\cv\ExperiencesProController');
 });
 
