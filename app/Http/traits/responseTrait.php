@@ -10,12 +10,16 @@ trait responseTrait{
      * @param array $data
      * @return void
      */
-    public function responseSuccess( string $message, array $data = [] ) {
+    public function responseSuccess( string $message, array $data = [], string $token = null ) {
 
         $response = [
             "_status" => 1,
             "_msg" => $message
         ];
+
+        if( $token != null ) {
+            $response['_access'] = $token;
+        }
 
         if( count( $data ) > 0 ){
             $response['_data'] = $data;

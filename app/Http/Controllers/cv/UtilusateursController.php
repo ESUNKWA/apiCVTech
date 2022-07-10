@@ -154,9 +154,12 @@ class UtilusateursController extends Controller
 
                 $utilisateur = User::where('email', '=', $request->email)->first();
 
-                if($comparaison = Hash::check($request->password, $utilisateur->password)){
+                if(Hash::check($request->password, $utilisateur->password)){
 
-                    return $this->responseSuccess('Utilisateur trouvé', [json_decode($utilisateur)]);
+                    // création du token;
+                    $token = $utilisateur->createToken('auth_token')->plainTextToken;
+
+                    return $this->responseSuccess('Utilisateur trouvé', [json_decode($utilisateur)], $token);
 
                 }else{
                     return $this->responseError('');
