@@ -8,5 +8,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('utilisateur', 'App\Http\Controllers\cv\UtilusateursController');
 Route::post('utilisateur.login', [UtilusateursController::class,'login']);
+Route::group([ 'middleware' => 'auth:sanctum'], function(){
+    Route::resource('utilisateur', 'App\Http\Controllers\cv\UtilusateursController');
+    Route::post('utilisateur.logout', [UtilusateursController::class,'logout']);
+});
+

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\traits\responseTrait;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -173,5 +174,10 @@ class UtilusateursController extends Controller
             return $validation->errors();
         }
 
+    }
+
+    public function logout() {
+        Auth::user()->tokens()->delete();
+        return $this->responseSuccess('Vous êtes maintenant déconnecté');
     }
 }
