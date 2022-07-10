@@ -6,15 +6,20 @@ trait responseTrait{
     /**
      * Cette fonction return le resultat de la requête en cas de success.
      *
+     * @param string $message
      * @param array $data
      * @return void
      */
-    public function responseSuccess( array $data ) {
+    public function responseSuccess( string $message, array $data = [] ) {
 
         $response = [
             "_status" => 1,
-            "_datas" => $data
+            "_msg" => $message
         ];
+
+        if( count( $data ) > 0 ){
+            $response['_data'] = $data;
+        }
 
         return response()->json($response, 200);
     }
