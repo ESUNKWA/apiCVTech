@@ -4,9 +4,11 @@ namespace App\Http\Controllers\cv;
 
 use App\Models\cr;
 use App\Models\User;
+use App\Models\Individu;
 use Illuminate\Http\Request;
-use App\Http\traits\responseTrait;
 
+use App\Http\traits\responseTrait;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -54,7 +56,7 @@ class UtilusateursController extends Controller
     {
         $input = $request->all();
 
-        try {
+
             //Validation des données
             $validation = Validator::make($input, [
                 'name' => 'required',
@@ -64,23 +66,35 @@ class UtilusateursController extends Controller
 
             if( !$validation->fails() ) {
 
-                //Insertion dans la bd
+                DB::beginTransaction();
+
+                try {
+                    //Insertion dans la bd
                 $insert = User::create([
                     'name' => $request->name,
                     'email' => $request->email,
                     'password' => bcrypt($request->password)
                 ]);
 
+                $insertIndividu = Individu::create([
+                    'r_nom' => $request->name,
+                    'r_prenoms' => $request->p_prenoms,
+                    'r_description' => $request->p_description,
+                ]);
+                DB::commit();
                 return $this->responseSuccess( 'L\'utilisateur [ '. $insert->name .' ] a bien été ajouté');
 
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    return $this->responseError($th->getMessage());
+
+                }
+
+
             }else {
-                return $this->responseError($validation->errors());
+                return $validation->errors();
             }
 
-
-        } catch (\Throwable $th) {
-            return $th->getMessage();
-        }
 
     }
 
