@@ -7,7 +7,6 @@ use App\Http\Controllers\cv\UtilusateursController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 Route::post('utilisateur.login', [UtilusateursController::class,'login']);
 Route::group([ 'middleware' => 'auth:sanctum'], function(){
     //Route relative au controller UtilusateursController
@@ -17,4 +16,3 @@ Route::group([ 'middleware' => 'auth:sanctum'], function(){
     //Route relative au controller ExperienceController
     Route::resource('experience', 'App\Http\Controllers\cv\ExperiencesProController');
 });
-
