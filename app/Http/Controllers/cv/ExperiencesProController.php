@@ -43,14 +43,14 @@ class ExperiencesProController extends Controller
         $inputs = $request->all();
         // Validation des données
         $errors = [
-            'p_user_id' => 'required',
+            'p_individu' => 'required',
             'p_date_debut' => 'required|date',
             'p_date_fin' => 'required|date',
             'p_libelle_poste' => 'required|min:4'
         ];
 
         $erreurs = [
-            'p_user_id.required' => 'Utilisateur inconnu',
+            'p_individu.required' => 'Utilisateur inconnu',
             'p_date_debut.required' => 'La date de debut est réquis',
             'p_date_debut.date' => 'Veuillez saisir une date valide',
             'p_date_fin.required' => 'La date de fin  est réquis',
